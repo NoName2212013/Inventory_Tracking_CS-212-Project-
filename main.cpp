@@ -41,7 +41,7 @@ public:
     void displayInventory() const {
         cout << "Inventory Items:" << endl;
         for (const auto& item : inventory) {
-            cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: $" << item.getPrice() << endl;
+            cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: ₹ " << item.getPrice()<<"/-"<< endl;
         }
     }
 
@@ -49,11 +49,11 @@ public:
     void findItem(const string& name) const {
         for (const auto& item : inventory) {
             if (item.getName() == name) {
-                cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: $" << item.getPrice() << endl;
+                cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: ₹ " << item.getPrice() <<"/-"<< endl;
                 return;
             }
         }
-        cout << "Item not found." << endl;
+        cout << "Sorry!! Item not found." << endl;
     }
 };
 
