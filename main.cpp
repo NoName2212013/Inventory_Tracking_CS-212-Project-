@@ -56,22 +56,22 @@ public:
     }
 
     // Method to add an item to the inventory
-    void addItem(const InventoryItem &item)
+    void addItem(string item)
     {
         // Check if the item already exists in the inventory
         for (size_t i = 0; i < inventory.size(); ++i)
         {
-            if (inventory[i].getName() == item.getName())
+            if (inventory[i].getName() == item)
             {
                 // Item found, update its quantity
                 int quantity;
-                cout << "Enter the number of " + item.getName() + "s to be added: ";
+                cout << "Enter the number of " + item + "s to be added: ";
                 cin >> quantity;
 
                 int currQuantity = inventory[i].getQuantity();
                 inventory[i].setQuantity(currQuantity + quantity);
 
-                cout << "Quantity added to " << item.getName() << endl;
+                cout << "Quantity added to " << item << endl;
                 cout << "New Quantity: " << inventory[i].getQuantity() << endl;
                 cout << endl;
                 return;
@@ -80,8 +80,13 @@ public:
 
         // Item not found, add it to the inventory
         cout << "Item not found in inventory. Adding new item..." << endl;
-        inventory.push_back(item);
-        cout << "New Item " << item.getName() << " Added" << endl;
+        int quantity,price;
+        cout<<"Enter the quantity:";
+        cin >> quantity;
+        cout<<"Enter the price per unit:";
+        cin >> price;
+        inventory.push_back(InventoryItem(item,quantity,price));
+        cout << "New Item " << item << " Added To The Inventory !" << endl;
         cout << endl;
     }
 
@@ -141,16 +146,49 @@ int main()
 {
     InventorySystem inventorySystem;
 
-    // Example: Adding items to the inventory
-    inventorySystem.addItem(InventoryItem("Item1", 10, 5.99));
-    inventorySystem.addItem(InventoryItem("Item2", 20, 10.50));
-    inventorySystem.addItem(InventoryItem("Item1", 0, 5.99));
+    int operation;
+    string item;
+    while(true){
+        cout<<"1)Display Inventory"<<endl;
+        cout<<"2)Display Item"<<endl;
+        cout<<"3)Add Items"<<endl;
+        cout<<"4)Remove Items"<<endl;
+        cout<<"5)Exit"<<endl;
+        cout<<"Enter which operation to perform:";
+        cin>>operation;
+        switch (operation) {
+            case 1 :inventorySystem.displayInventory();
+                break;
+            case 2 :
+                cout<<"Enter the name of the item to be searched:";
+                cin >> item;
+                inventorySystem.findItem(item);
+                break;
+            case 3 :
+                cout<<"Enter the item to be added:";
+                cin>>item;
+                inventorySystem.addItem(item);
+                break;
+            case 4 :cout<<"Enter the item to be added:";
+                cin>>item;
+                inventorySystem.addItem(item);
+                break;
+            case 5 :// Exit
+            cout<<"Exiting Program..."<<endl;
+            exit(0); 
+            break;
 
-    // Example: Displaying all items in the inventory
-    inventorySystem.displayInventory();
+            default:
+            cout << "Invalid operation! Please enter a valid option." << endl;
+            break;
+        }
+        int doContinue;
+        cout<<"Continue Updating? Y-1/N-0: ";
+        cin>>doContinue;
+        if(!doContinue)
+            break;
+    }
 
-    // Example: Finding an item by name
-    inventorySystem.findItem("Item1");
 
     return 0;
 }
