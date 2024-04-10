@@ -40,7 +40,7 @@ public:
 
         if (inventory.empty())
         {
-            cout << "No Item present currently." << endl;
+            cout << "No Items present currently." << endl;
             return;
         }
 
@@ -48,7 +48,7 @@ public:
         {
             if (item.getName() == name)
             {
-                cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: $" << item.getPrice() << endl;
+                cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: ₹" << item.getPrice() << endl;
                 return;
             }
         }
@@ -96,7 +96,7 @@ public:
         cout << "Inventory Items:" << endl;
         for (const auto &item : inventory)
         {
-            cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: $" << item.getPrice() << endl;
+            cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: ₹" << item.getPrice() << endl;
         }
     }
 
@@ -113,7 +113,7 @@ public:
         if (it != inventory.end())
         {
             int quantity;
-            cout << "Enter quantity to sell: ";
+            cout << "Enter the quantity to sell: ";
             cin >> quantity;
 
             int currQuantity = it->getQuantity();
@@ -130,6 +130,7 @@ public:
 
             // Display sale information
             cout << "Item " << name << " successfully sold!" << endl;
+            cout<< "Quantity sold:-" << quantity << endl;
             cout << "Total Amount (Including taxes): Rs." << (it->getPrice() * quantity) << endl;
             cout << "Updated Quantity: " << it->getQuantity() << endl;
             cout << endl;
