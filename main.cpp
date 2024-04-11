@@ -2,10 +2,12 @@
 #include <vector>
 #include <string>
 #include <algorithm>
+#include <fstream> 
+#include <sstream>
 
 using namespace std;
 
-// Define a class for the inventory item
+
 class InventoryItem
 {
 private:
@@ -14,27 +16,24 @@ private:
     double price;
 
 public:
-    // Constructor
     InventoryItem(string _name, int _quantity, double _price) : name(_name), quantity(_quantity), price(_price) {}
 
-    // Getter methods
     string getName() const { return name; }
     int getQuantity() const { return quantity; }
     double getPrice() const { return price; }
 
-    // Setter methods
     void setName(string _name) { name = _name; }
     void setQuantity(int _quantity) { quantity = _quantity; }
     void setPrice(double _price) { price = _price; }
 };
 
-// Define a class for the inventory system
 class InventorySystem
 {
 private:
     vector<InventoryItem> inventory;
 
 public:
+
     void findItem(const string &name) const
     {
 
@@ -58,12 +57,12 @@ public:
     // Method to add an item to the inventory
     void addItem(string item)
     {
-        // Check if the item already exists in the inventory
+
         for (size_t i = 0; i < inventory.size(); ++i)
         {
             if (inventory[i].getName() == item)
             {
-                // Item found, update its quantity
+                
                 int quantity;
                 cout << "Enter the number of " + item + "s to be added: ";
                 cin >> quantity;
@@ -78,7 +77,6 @@ public:
             }
         }
 
-        // Item not found, add it to the inventory
         cout << "Item not found in inventory. Adding new item..." << endl;
         int quantity,price;
         cout<<"Enter the quantity:";
@@ -91,29 +89,39 @@ public:
     }
 
     // Method to display all items in the inventory
-    void displayInventory() const
-    {   
-        if (inventory.empty())
-        {
-            cout << "No Item present currently." << endl;
-            return;
-        }
-
-        cout << "Inventory Items:" << endl;
-        for (const auto &item : inventory)
-        {
-            cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: ₹" << item.getPrice() << endl;
-        }
+void displayInventory() const
+{
+    if (inventory.empty())
+    {
+        cout << "No items are currently in the inventory." << endl;
+        return;
     }
+
+    cout << "--------------------------------------------------" << endl;
+    cout << "Inventory Items:" << endl;
+    cout << "--------------------------------------------------" << endl;
+    cout << "Name\t\tQuantity\tPrice (per unit)" << endl;
+    cout << "--------------------------------------------------" << endl;
+    for (const auto &item : inventory)
+    {
+        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\tRs." << item.getPrice() << endl;
+    }
+    cout << "--------------------------------------------------" << endl;
+}
+
 
     // Method to sell item
     void sellItem(const string &name)
-    {
-        // Find the item in the inventory
+    {   
+        if (inventory.empty())
+        {
+            cout << "No Item present currently.Add more items to proceed." << endl;
+            return;
+        }
+
         auto it = std::find_if(inventory.begin(), inventory.end(), [&](const InventoryItem &item)
                                { return item.getName() == name; });
 
-        // Check if the item was found
         if (it != inventory.end())
         {
             int quantity;
@@ -123,17 +131,15 @@ public:
 
             int currQuantity = it->getQuantity();
 
-            // Validate the quantity
             while (quantity > currQuantity || quantity <= 0)
             {
                 cout << "Please enter a valid quantity to sell (<= " << currQuantity << "): ";
                 cin >> quantity;
             }
 
-            // Update the quantity
             it->setQuantity(currQuantity - quantity);
 
-            // Display sale information
+            
             cout << endl;
             cout << "Item " << name << " successfully sold!" << endl;
             cout<< "Quantity sold:-" << quantity << endl;
@@ -147,6 +153,59 @@ public:
             cout << endl;
         }
     }
+    
+    void saveInventory(const string& filename) const
+{
+    ofstream outputFile(filename); 
+    if (!outputFile)
+    {
+        cout << "Error: Unable to open file for writing." << endl;
+        return;
+    }
+    cout << "Saving..... " << endl;
+    for (const auto &item : inventory)
+    {
+        outputFile << item.getName() << " " << item.getQuantity() << " " << item.getPrice() << endl;
+    }
+
+    outputFile.close();
+    cout << "Inventory saved to file successfully." << endl;
+}
+
+// Method to load inventory from a file
+void loadInventory(const string& filename)
+{
+    ifstream inputFile(filename);
+    if (!inputFile)
+    {
+        cout << "Error: Unable to open file for reading." << endl;
+        return;
+    }
+
+    inventory.clear();
+
+    string line;
+    while (getline(inputFile, line))
+    {
+
+        stringstream ss(line);
+        string name;
+        int quantity;
+        double price;
+
+       if (ss >> name >> quantity >> price && ss.peek() == EOF)
+        {
+            inventory.push_back(InventoryItem(name, quantity, price));
+        }
+        
+    }
+
+    inputFile.close();
+    cout << "Inventory loaded from file successfully." << endl;
+}
+
+
+    
 };
 
 int main()
@@ -154,13 +213,15 @@ int main()
     InventorySystem inventorySystem;
 
     int operation;
-    string item;
+    string item,file;
+    int choice;
     while(true){
         cout<<"1)Display Inventory"<<endl;
         cout<<"2)Display Item"<<endl;
         cout<<"3)Add Items"<<endl;
         cout<<"4)Sell Items"<<endl;
-        cout<<"5)Exit"<<endl;
+        cout<<"5)Save & Load Inventory "<<endl;
+        cout<<"6)Exit"<<endl;
         cout<<"Enter which operation to perform:";
         cin>>operation;
         switch (operation) {
@@ -190,7 +251,21 @@ int main()
                 cin>>item;
                 inventorySystem.sellItem(item);
                 break;
-            case 5 :// Exit
+            case 5: 
+                cout << endl;
+                cout<<"5)Save & Load Inventory "<<endl;
+                cout<<"Enter 1 to Save or 0 to Load inventory : ";
+                cin>>choice;
+                cout<<"Enter the file name to proceed: "<<endl;
+                cin >>file;
+                if(choice){
+                    inventorySystem.saveInventory(file);
+                }
+                else{
+                    inventorySystem.loadInventory(file);
+                }
+                break;
+            case 6 :// Exit
             cout << endl;
             cout<<"Exiting Program..."<<endl;
             exit(0); 
