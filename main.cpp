@@ -39,7 +39,7 @@ public:
 
         if (inventory.empty())
         {
-            cout << "No Items present currently." << endl;
+            cout << "No Items present in the inventory currently." << endl;
             return;
         }
 
@@ -77,7 +77,8 @@ public:
             }
         }
 
-        cout << "Item not found in inventory. Adding new item..." << endl;
+        // Item not found, add it to the inventory
+        cout << "Item not found in inventory."<<endl<<"Adding the new item..." << endl;
         int quantity,price;
         cout<<"Enter the quantity:";
         cin >> quantity;
@@ -112,13 +113,12 @@ void displayInventory() const
 
     // Method to sell item
     void sellItem(const string &name)
-    {   
+    {
         if (inventory.empty())
         {
-            cout << "No Item present currently.Add more items to proceed." << endl;
+            cout << "No Items present in the inventory currently!! Please add items to sell." << endl;
             return;
         }
-
         auto it = std::find_if(inventory.begin(), inventory.end(), [&](const InventoryItem &item)
                                { return item.getName() == name; });
 
@@ -139,11 +139,11 @@ void displayInventory() const
 
             it->setQuantity(currQuantity - quantity);
 
-            
-            cout << endl;
-            cout << "Item " << name << " successfully sold!" << endl;
-            cout<< "Quantity sold:-" << quantity << endl;
-            cout << "Total Amount (Including taxes): Rs." << (it->getPrice() * quantity) << endl;
+             cout << "--------------------------------------------------" << endl;
+            cout << "Name\t\tQuantity Sold\tPrice (per unit)" << endl;
+            cout << "--------------------------------------------------" << endl;
+            cout << name << "\t\t" << quantity << "\t\tRs." << it->getPrice() << endl;
+            cout << "Total Amount (Including taxes): Rs." << (it->getPrice() * quantity)<<"/-" << endl;
             cout << "Updated Quantity: " << it->getQuantity() << endl;
             cout << endl;
         }
@@ -215,10 +215,12 @@ int main()
     int operation;
     string item,file;
     int choice;
+    cout<<"WELCOME TO THE INVENTORY TRACKING SYSTEM..."<<endl;
+    cout<<"Main Menu:"<<endl;
     while(true){
         cout<<"1)Display Inventory"<<endl;
-        cout<<"2)Display Item"<<endl;
-        cout<<"3)Add Items"<<endl;
+        cout<<"2)Search an Item"<<endl;
+        cout<<"3)Restock/Add Items"<<endl;
         cout<<"4)Sell Items"<<endl;
         cout<<"5)Save & Load Inventory "<<endl;
         cout<<"6)Exit"<<endl;
@@ -246,12 +248,11 @@ int main()
                 break;
             case 4 :
                 cout << endl;
-                cout<<"4)Sell Items"<<endl;
-                cout<<"Enter the item to be sold:";
+                cout<<"Enter the item to sell:";
                 cin>>item;
                 inventorySystem.sellItem(item);
                 break;
-            case 5: 
+            case 5 :
                 cout << endl;
                 cout<<"5)Save & Load Inventory "<<endl;
                 cout<<"Enter 1 to Save or 0 to Load inventory : ";
@@ -266,8 +267,7 @@ int main()
                 }
                 break;
             case 6 :// Exit
-            cout << endl;
-            cout<<"Exiting Program..."<<endl;
+            cout<<"Exiting Program..."<<endl<<"Have a nice day!!";
             exit(0); 
             break;
 
@@ -275,14 +275,14 @@ int main()
             cout << "Invalid operation! Please enter a valid option." << endl;
             break;
         }
-        int doContinue;
-        cout<<"Continue Updating? Y-1/N-0: ";
+        char doContinue;
+        cout<<"Continue Updating? Y/N: ";
         cin>>doContinue;
         cout << endl;
-        if(!doContinue)
+        if(doContinue=='n'){
+            cout<<"Exiting Program..."<<endl<<"Have a nice day!!";
             break;
+        }
     }
-
-
     return 0;
 }
