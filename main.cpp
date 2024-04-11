@@ -47,7 +47,7 @@ public:
         {
             if (item.getName() == name)
             {
-                cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: ₹" << item.getPrice() << endl;
+                cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: Rs." << item.getPrice() << endl;
                 return;
             }
         }
@@ -95,7 +95,7 @@ public:
         cout << "Inventory Items:" << endl;
         for (const auto &item : inventory)
         {
-            cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: ₹" << item.getPrice() << endl;
+            cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: Rs." << item.getPrice() << endl;
         }
     }
 
@@ -239,12 +239,11 @@ int main()
             cout << "Invalid operation! Please enter a valid option." << endl;
             break;
         }
-        char doContinue;
+        int doContinue;
         cout<<"Continue Updating? Y/N: ";
         cin>>doContinue;
         if(!doContinue)
-            break;
-        }
+        {break;}
     }
     return 0;
 }
