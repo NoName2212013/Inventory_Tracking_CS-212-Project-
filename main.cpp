@@ -48,7 +48,7 @@ public:
         {
             if (item.getName() == name)
             {
-                cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: $" << item.getPrice() << endl;
+                cout << "Name: " << item.getName() << "------- Quantity: " << item.getQuantity() << "------- Price: $" << item.getPrice() << endl;
                 return;
             }
         }
@@ -92,15 +92,19 @@ public:
 
     // Method to display all items in the inventory
     void displayInventory() const
-    {
+    {   
+        if (inventory.empty())
+        {
+            cout << "No Item present currently." << endl;
+            return;
+        }
+
         cout << "Inventory Items:" << endl;
         for (const auto &item : inventory)
         {
             cout << "Name: " << item.getName() << ", Quantity: " << item.getQuantity() << ", Price: $" << item.getPrice() << endl;
         }
     }
-
-    // Method to find and display an item by name
 
     // Method to sell item
     void sellItem(const string &name)
@@ -115,6 +119,7 @@ public:
             int quantity;
             cout << "Enter quantity to sell: ";
             cin >> quantity;
+            cout << endl;
 
             int currQuantity = it->getQuantity();
 
@@ -129,6 +134,7 @@ public:
             it->setQuantity(currQuantity - quantity);
 
             // Display sale information
+            cout << endl;
             cout << "Item " << name << " successfully sold!" << endl;
             cout << "Total Amount (Including taxes): Rs." << (it->getPrice() * quantity) << endl;
             cout << "Updated Quantity: " << it->getQuantity() << endl;
@@ -152,28 +158,39 @@ int main()
         cout<<"1)Display Inventory"<<endl;
         cout<<"2)Display Item"<<endl;
         cout<<"3)Add Items"<<endl;
-        cout<<"4)Remove Items"<<endl;
+        cout<<"4)Sell Items"<<endl;
         cout<<"5)Exit"<<endl;
         cout<<"Enter which operation to perform:";
         cin>>operation;
         switch (operation) {
-            case 1 :inventorySystem.displayInventory();
+            case 1 :
+                cout << endl;
+                cout<<"1)Display Inventory"<<endl;
+                inventorySystem.displayInventory();
                 break;
             case 2 :
+                cout << endl;
+                cout<<"2)Display Item"<<endl;
                 cout<<"Enter the name of the item to be searched:";
                 cin >> item;
                 inventorySystem.findItem(item);
                 break;
             case 3 :
+                cout << endl;
+                cout<<"3)Add Items"<<endl;
                 cout<<"Enter the item to be added:";
                 cin>>item;
                 inventorySystem.addItem(item);
                 break;
-            case 4 :cout<<"Enter the item to be added:";
+            case 4 :
+                cout << endl;
+                cout<<"4)Sell Items"<<endl;
+                cout<<"Enter the item to be sold:";
                 cin>>item;
-                inventorySystem.addItem(item);
+                inventorySystem.sellItem(item);
                 break;
             case 5 :// Exit
+            cout << endl;
             cout<<"Exiting Program..."<<endl;
             exit(0); 
             break;
@@ -185,6 +202,7 @@ int main()
         int doContinue;
         cout<<"Continue Updating? Y-1/N-0: ";
         cin>>doContinue;
+        cout << endl;
         if(!doContinue)
             break;
     }
