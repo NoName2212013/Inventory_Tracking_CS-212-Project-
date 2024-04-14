@@ -7,7 +7,6 @@
 
 using namespace std;
 
-
 class InventoryItem
 {
 private:
@@ -90,11 +89,25 @@ public:
     }
 
     // Method to display all items in the inventory
-    void displayInventory() const
+void displayInventory() const
+{
+    if (inventory.empty())
     {
         cout << "No items are currently in the inventory." << endl;
         return;
     }
+
+    cout << "--------------------------------------------------" << endl;
+    cout << "Inventory Items:" << endl;
+    cout << "--------------------------------------------------" << endl;
+    cout << "Name\t\tQuantity\tPrice (per unit)" << endl;
+    cout << "--------------------------------------------------" << endl;
+    for (const auto &item : inventory)
+    {
+        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\tRs." << item.getPrice() << endl;
+    }
+    cout << "--------------------------------------------------" << endl;
+}
 
 
     // Method to sell item
@@ -202,8 +215,8 @@ int main()
     string item,file;
     int choice;
     cout<<"WELCOME TO THE INVENTORY TRACKING SYSTEM..."<<endl;
-    cout<<"Main Menu:"<<endl;
     while(true){
+        cout<<"Main Menu:"<<endl;
         cout<<"1)Display Inventory"<<endl;
         cout<<"2)Search an Item"<<endl;
         cout<<"3)Restock/Add Items"<<endl;
@@ -261,7 +274,7 @@ int main()
             cout << "Invalid operation! Please enter a valid option." << endl;
             break;
         }
-        int doContinue;
+        char doContinue;
         cout<<"Continue Updating? Y/N: ";
         cin>>doContinue;
         cout << endl;
