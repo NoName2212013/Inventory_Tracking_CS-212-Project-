@@ -187,7 +187,7 @@ void displayInventory() const
     cout << "Saving..... " << endl;
     for (const auto &item : inventory)
     {
-        outputFile << item.getName() << " " << item.getQuantity() << " " << item.getPrice() << endl;
+        outputFile << item.getName() << " " << item.getQuantity() << " " << item.getPrice() << " " << item.getExpirationDate() << endl;
     }
 
     outputFile.close();
@@ -237,7 +237,9 @@ int main()
     int operation;
     string item,file;
     int choice,i;
+    cout<<"--------------------------------------------"<<endl;
     cout<<"WELCOME TO THE INVENTORY TRACKING SYSTEM..."<<endl;
+    cout<<"--------------------------------------------"<<endl;
     while(true){
         cout<<"Main Menu:"<<endl;
         cout<<"1)Display Inventory"<<endl;
