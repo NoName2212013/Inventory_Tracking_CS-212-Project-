@@ -7,6 +7,7 @@
 
 using namespace std;
 
+
 class InventoryItem
 {
 private:
@@ -17,19 +18,32 @@ private:
 public:
     InventoryItem(string _name, int _quantity, double _price) : name(_name), quantity(_quantity), price(_price) {}
 
-    string getName() const { return name; }
-    int getQuantity() const { return quantity; }
-    double getPrice() const { return price; }
+    string getName() const  { return name; }
+    int getQuantity() const  { return quantity; }
+    double getPrice() const  { return price; }
 
     void setName(string _name) { name = _name; }
     void setQuantity(int _quantity) { quantity = _quantity; }
     void setPrice(double _price) { price = _price; }
 };
 
+class PerishableItem : public InventoryItem{
+private:
+    string expirationDate;
+
+public:
+    PerishableItem(string _name, int _quantity, double _price, string _expirationDate)
+        : InventoryItem(_name, _quantity, _price), expirationDate(_expirationDate) {}
+
+    string getExpirationDate() const { return expirationDate; }
+
+
+};
+
 class InventorySystem
 {
 private:
-    vector<InventoryItem> inventory;
+    vector<PerishableItem> inventory;
 
 public:
 
@@ -78,13 +92,16 @@ public:
 
         // Item not found, add it to the inventory
         cout << "Item not found in inventory."<<endl<<"Adding the new item..." << endl;
-        int quantity,price;
+        int quantity,price,choice;
+        string expirationDate;
         cout<<"Enter the quantity:";
         cin >> quantity;
         cout<<"Enter the price per unit:";
         cin >> price;
-        inventory.push_back(InventoryItem(item,quantity,price));
-        cout << "New Item " << item << " Added To The Inventory !" << endl;
+        cout<<"Enter the expiration date(dd/mm/yyyy) or '-' if not:";
+        cin>>expirationDate;
+        inventory.push_back(PerishableItem(item,quantity,price,expirationDate));
+        cout << "New Item " << item << " Added To The Inventory !!" << endl;
         cout << endl;
     }
 
@@ -93,33 +110,39 @@ void displayInventory() const
 {
     if (inventory.empty())
     {
-        cout << "No items are currently in the inventory." << endl;
+        cout <<"-----------------------------------------"<<endl;
+        cout <<"No items are currently in the inventory." << endl;
+        cout <<"-----------------------------------------"<<endl;
         return;
     }
 
-    cout << "--------------------------------------------------" << endl;
+    cout << "-----------------------------------------------------------------------------------------------" << endl;
     cout << "Inventory Items:" << endl;
-    cout << "--------------------------------------------------" << endl;
-    cout << "Name\t\tQuantity\tPrice (per unit)" << endl;
-    cout << "--------------------------------------------------" << endl;
+    cout << "-----------------------------------------------------------------------------------------------" << endl;
+    cout << "Name\t|\tQuantity\t|\tPrice (per unit)\t|\tExpiration Date" << endl;
+    cout << "-----------------------------------------------------------------------------------------------" << endl;
     for (const auto &item : inventory)
     {
-        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\tRs." << item.getPrice() << endl;
+
+        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\t\tRs." << item.getPrice() <<"\t\t\t\t"<<item.getExpirationDate()<< endl;
+        cout << "-----------------------------------------------------------------------------------------------" << endl;
     }
-    cout << "--------------------------------------------------" << endl;
 }
 
 
     // Method to sell item
     void sellItem(const string &name)
-    {
+    {   string item = name;
         if (inventory.empty())
         {
+            cout <<"------------------------------------------------------------------------"<<endl;
             cout << "No Items present in the inventory currently!! Please add items to sell." << endl;
+            cout <<"------------------------------------------------------------------------"<<endl;
             return;
         }
-        auto it = std::find_if(inventory.begin(), inventory.end(), [&](const InventoryItem &item)
-                               { return item.getName() == name; });
+        item[0] = toupper(item[0]);
+        auto it = std::find_if(inventory.begin(), inventory.end(), [&](const InventoryItem &i)
+                               { return i.getName() == item; });
 
         if (it != inventory.end())
         {
@@ -141,8 +164,8 @@ void displayInventory() const
              cout << "--------------------------------------------------" << endl;
             cout << "Name\t\tQuantity Sold\tPrice (per unit)" << endl;
             cout << "--------------------------------------------------" << endl;
-            cout << name << "\t\t" << quantity << "\t\tRs." << it->getPrice() << endl;
-            cout << "Total Amount (Including taxes): Rs." << (it->getPrice() * quantity)<<"/-" << endl;
+            cout << item << "\t\t" << quantity << "\t\tRs." << it->getPrice() << endl;
+            cout << "Total Amount (Including taxes): Rs." << (it->getPrice () * quantity)<<"/-" << endl;
             cout << "Updated Quantity: " << it->getQuantity() << endl;
             cout << endl;
         }
@@ -188,13 +211,13 @@ void loadInventory(const string& filename)
     {
 
         stringstream ss(line);
-        string name;
+        string name,expirationDate;
         int quantity;
         double price;
 
-       if (ss >> name >> quantity >> price && ss.peek() == EOF)
+       if (ss >> name >> quantity >> price >> expirationDate && ss.peek() == EOF)
         {
-            inventory.push_back(InventoryItem(name, quantity, price));
+            inventory.push_back(PerishableItem(name, quantity, price,expirationDate));
         }
         
     }
@@ -213,7 +236,7 @@ int main()
 
     int operation;
     string item,file;
-    int choice;
+    int choice,i;
     cout<<"WELCOME TO THE INVENTORY TRACKING SYSTEM..."<<endl;
     while(true){
         cout<<"Main Menu:"<<endl;
@@ -236,19 +259,27 @@ int main()
                 cout<<"2)Display Item"<<endl;
                 cout<<"Enter the name of the item to be searched:";
                 cin >> item;
+                item[0] = toupper(item[0]);
                 inventorySystem.findItem(item);
                 break;
             case 3 :
                 cout << endl;
                 cout<<"3)Add Items"<<endl;
+                cout<<"Enter the number of items to be added:";
+                cin>>i;
+                while(i--){
                 cout<<"Enter the item to be added:";
                 cin>>item;
+                item[0] = toupper(item[0]);
                 inventorySystem.addItem(item);
+
+                }
                 break;
             case 4 :
                 cout << endl;
                 cout<<"Enter the item to sell:";
                 cin>>item;
+                item[0] = toupper(item[0]);
                 inventorySystem.sellItem(item);
                 break;
             case 5 :
@@ -274,14 +305,7 @@ int main()
             cout << "Invalid operation! Please enter a valid option." << endl;
             break;
         }
-        char doContinue;
-        cout<<"Continue Updating? Y/N: ";
-        cin>>doContinue;
-        cout << endl;
-        if(doContinue=='n'){
-            cout<<"Exiting Program..."<<endl<<"Have a nice day!!";
-            break;
-        }
+
     }
     return 0;
 }
