@@ -8,8 +8,8 @@
 using namespace std;
 
 
-
-class InventoryItem{
+class InventoryItem
+{
 private:
     string name;
     int quantity;
@@ -101,7 +101,7 @@ public:
         cout<<"Enter the expiration date(dd/mm/yyyy) or '-' if not:";
         cin>>expirationDate;
         inventory.push_back(PerishableItem(item,quantity,price,expirationDate));
-        cout << "New Item " << item << " Added To The Inventory !" << endl;
+        cout << "New Item " << item << " Added To The Inventory !!" << endl;
         cout << endl;
     }
 
@@ -110,21 +110,23 @@ void displayInventory() const
 {
     if (inventory.empty())
     {
-        cout << "No items are currently in the inventory." << endl;
+        cout <<"-----------------------------------------"<<endl;
+        cout <<"No items are currently in the inventory." << endl;
+        cout <<"-----------------------------------------"<<endl;
         return;
     }
 
-    cout << "-----------------------------------------------------" << endl;
+    cout << "-----------------------------------------------------------------------------------------------" << endl;
     cout << "Inventory Items:" << endl;
-    cout << "-----------------------------------------------------" << endl;
+    cout << "-----------------------------------------------------------------------------------------------" << endl;
     cout << "Name\t|\tQuantity\t|\tPrice (per unit)\t|\tExpiration Date" << endl;
-    cout << "-----------------------------------------------------" << endl;
+    cout << "-----------------------------------------------------------------------------------------------" << endl;
     for (const auto &item : inventory)
     {
 
-        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\tRs." << item.getPrice() <<"\t\t"<<item.getExpirationDate()<< endl;
+        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\t\tRs." << item.getPrice() <<"\t\t\t\t"<<item.getExpirationDate()<< endl;
+        cout << "-----------------------------------------------------------------------------------------------" << endl;
     }
-    cout << "--------------------------------------------------" << endl;
 }
 
 
@@ -133,7 +135,9 @@ void displayInventory() const
     {   string item = name;
         if (inventory.empty())
         {
+            cout <<"------------------------------------------------------------------------"<<endl;
             cout << "No Items present in the inventory currently!! Please add items to sell." << endl;
+            cout <<"------------------------------------------------------------------------"<<endl;
             return;
         }
         item[0] = toupper(item[0]);
@@ -183,7 +187,7 @@ void displayInventory() const
     cout << "Saving..... " << endl;
     for (const auto &item : inventory)
     {
-        outputFile << item.getName() << " " << item.getQuantity() << " " << item.getPrice() << endl;
+        outputFile << item.getName() << " " << item.getQuantity() << " " << item.getPrice() << " " << item.getExpirationDate() << endl;
     }
 
     outputFile.close();
@@ -233,10 +237,11 @@ int main()
     int operation;
     string item,file;
     int choice,i;
+    cout<<"--------------------------------------------"<<endl;
     cout<<"WELCOME TO THE INVENTORY TRACKING SYSTEM..."<<endl;
-    cout<<"Main Menu:"<<endl;
+    cout<<"--------------------------------------------"<<endl;
     while(true){
-        cout<<endl;
+        cout<<"Main Menu:"<<endl;
         cout<<"1)Display Inventory"<<endl;
         cout<<"2)Search an Item"<<endl;
         cout<<"3)Restock/Add Items"<<endl;
@@ -256,6 +261,7 @@ int main()
                 cout<<"2)Display Item"<<endl;
                 cout<<"Enter the name of the item to be searched:";
                 cin >> item;
+                item[0] = toupper(item[0]);
                 inventorySystem.findItem(item);
                 break;
             case 3 :
@@ -275,6 +281,7 @@ int main()
                 cout << endl;
                 cout<<"Enter the item to sell:";
                 cin>>item;
+                item[0] = toupper(item[0]);
                 inventorySystem.sellItem(item);
                 break;
             case 5 :
