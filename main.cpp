@@ -114,17 +114,17 @@ void displayInventory() const
         return;
     }
 
-    cout << "-----------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------------------------------------------------" << endl;
     cout << "Inventory Items:" << endl;
-    cout << "-----------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------------------------------------------------" << endl;
     cout << "Name\t|\tQuantity\t|\tPrice (per unit)\t|\tExpiration Date" << endl;
-    cout << "-----------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------------------------------------------------" << endl;
     for (const auto &item : inventory)
     {
 
-        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\tRs." << item.getPrice() <<"\t\t"<<item.getExpirationDate()<< endl;
+        cout << item.getName() << "\t\t" << item.getQuantity() << "\t\t\t\tRs." << item.getPrice() <<"\t\t\t\t"<<item.getExpirationDate()<< endl;
     }
-    cout << "--------------------------------------------------" << endl;
+    cout << "-------------------------------------------------------------------------------------------------------" << endl;
 }
 
 
@@ -183,7 +183,7 @@ void displayInventory() const
     cout << "Saving..... " << endl;
     for (const auto &item : inventory)
     {
-        outputFile << item.getName() << " " << item.getQuantity() << " " << item.getPrice() << endl;
+        outputFile << item.getName() << " " << item.getQuantity() << " " << item.getPrice() <<" "<<item.getExpirationDate()<< endl;
     }
 
     outputFile.close();
@@ -263,8 +263,8 @@ int main()
                 cout<<"3)Add Items"<<endl;
                 cout<<"Enter the number of items to be added:";
                 cin>>i;
-                while(i--){
-                cout<<"Enter the item to be added:";
+                for(int j = 1 ; j <= i; j++){
+                cout<<"Enter the "<<j<<"th item to be added:";
                 cin>>item;
                 item[0] = toupper(item[0]);
                 inventorySystem.addItem(item);
