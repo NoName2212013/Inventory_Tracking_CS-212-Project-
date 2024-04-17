@@ -193,8 +193,6 @@ void displayInventory() const
 
     outputFile.close();
     cout << "Inventory saved to file successfully." << endl;
-        cout<<endl;
-
 }
 
 // Method to load inventory from a file
@@ -227,7 +225,6 @@ void loadInventory(const string& filename)
 
     inputFile.close();
     cout << "Inventory loaded from file successfully." << endl;
-    cout<<endl;
 }
 
 
@@ -245,7 +242,6 @@ int main()
     cout<<"WELCOME TO THE INVENTORY TRACKING SYSTEM..."<<endl;
     cout<<"--------------------------------------------"<<endl;
     while(true){
-        cout<<endl;
         cout<<"Main Menu:"<<endl;
         cout<<"1)Display Inventory"<<endl;
         cout<<"2)Search an Item"<<endl;
